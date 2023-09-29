@@ -32,6 +32,7 @@ void Block::Build(PNG& img, unsigned int x, unsigned int y, unsigned int dimensi
 **/
 void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 	// complete your implementation below
+	// ignore this comment
 	if (full) {
 		for (int i = x; i < (x+Dimension()); i++) {
 			for (int j = y; j < (y+Dimension()); j++) {
