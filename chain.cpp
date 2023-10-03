@@ -19,8 +19,37 @@
  * @pre input image's width and height are evenly divisible by nodedimension
 **/
 Chain::Chain(PNG& img, unsigned int nodedimension) {
-	// complete your implementation below
-    
+
+	length_ = (img.width()  * img.length())/nodedimension;
+
+	if(length_ != 0 ) {
+		NW =  new Node();
+		SW = NW;
+	for(int i = 0; i < length_; i++) {
+		Node *temp = new Node();
+		temp->next = NW;
+		temp->next->prev = temp;
+		NW = temp;
+	}
+
+
+	}
+
+
+	Node* temp = NW;
+	for(int i = 0; i < img.width(); i+= nodedimension) {
+		for(int j = 0; img.length(); i += nodedimention) {
+			temp->data = new block(img, i, j, nodedimension);	
+			temp = temp->next;
+
+		}
+	}
+	temp = NULL;
+
+
+
+
+
 }
 
 /**
@@ -36,6 +65,7 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
  * @param full whether to render all pixel data into a full-size image,
  *             or block averages into a tiny image
 **/
+//KIA
 PNG Chain::Render(unsigned int cols, bool full) {
 	// replace the line below with your implementation
 	return PNG();
@@ -44,6 +74,7 @@ PNG Chain::Render(unsigned int cols, bool full) {
 /**
  * Inserts a new Node containing ndata at the back of the Chain
 **/
+//KIA
 void Chain::InsertBack(const Block& ndata) {
 	// complete your implementation below
     
@@ -57,6 +88,7 @@ void Chain::InsertBack(const Block& ndata) {
  *  
  *  after:	NW -> H <-> G <-> F <-> E <-> D <-> C <-> B <-> A <- SE
 **/
+//ALI
 void Chain::Reverse() {
 	// complete your implementation below
     
@@ -80,6 +112,7 @@ void Chain::Reverse() {
  * @param cols number of Blocks to use for the initial width of the image
  * @pre length_ is divisible by cols (i.e. no "partially-filled" rows)
 **/
+//ALI
 void Chain::FlipHorizontal(unsigned int cols) {
 	// complete your implementation below
     
@@ -103,6 +136,7 @@ void Chain::FlipHorizontal(unsigned int cols) {
  * @param cols number of Blocks to use for the initial width of the image
  * @pre length_ is divisible by cols (i.e. no "partially-filled" rows)
 **/
+//ALI
 void Chain::FlipVertical(unsigned int cols) {
 	// complete your implementation below
     
@@ -112,6 +146,7 @@ void Chain::FlipVertical(unsigned int cols) {
  * Produces a blocky, pixellated effect (in a rendered image) by replacing each
  * block's pixel data with the average color of the block.
 **/
+//KIA
 void Chain::Blockify() {
 	// complete your implementation below
     
@@ -122,6 +157,7 @@ void Chain::Blockify() {
  * this Chain object. Called by destructor and operator=.
  * You must complete its implementation for PA1.
 **/
+//KIA
 void Chain::Clear() {
 	// complete your implementation below
     
@@ -134,6 +170,8 @@ void Chain::Clear() {
  * You must complete its implementation for PA1.
  * @param other The Chain to be copied.
 **/
+//
+//ALI
 void Chain::Copy(const Chain& other) {
 	// complete your implementation below
     

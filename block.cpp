@@ -34,7 +34,10 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 	// complete your implementation below
 	// ignore this comment
 	if (full) {
-		for (int i = x; i < (x+Dimension()); i++) {
+
+		//TODO: range issues x + dimension, y + dimension
+		//  	fix bool full 
+		for (int i = x; i < (x+Dimension()); i++) { 
 			for (int j = y; j < (y+Dimension()); j++) {
 				img.getPixel(i, j) = data[j-y, i-x];
 			}
