@@ -35,8 +35,6 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 	// ignore this comment
 	if (full) {
 
-		//TODO: range issues x + dimension, y + dimension
-		//  	fix bool full 
 		for (int i = x; i < (x+Dimension()); i++) { 
 			for (int j = y; j < (y+Dimension()); j++) {
 				img.getPixel(i, j) = data[j-y, i-x];
@@ -44,21 +42,12 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 		}	
 		
 	} else {
-		float avgRed = 0;
-		float avgGreen = 0;
-		float avgBlue = 0;
-		for (int i = x; i < (x+Dimension()); i++) {
-			for (int j = y; j < (y+Dimension()); j++) {
-				avgRed += img.getPixel()->r;
-				avgGreen += img.getPixel()->g;
-				avgBlue += img.getPixel()->b;
-			}
-		}
-		avgRed = avgRed/Dimension();
-		avgGreen = avgGreen/Dimension();
-		avgBlue = avgBlue/Dimension();
-		RGBAPixel pixel(avgRed, avgGreen, avgBlue);
-		img.getPixel(x, y) = pixel;
+
+		RGBAPixel pixel = GetAverageColor();
+
+		img.getPixel(x, y)->r = pixel->r;
+		img.getPixel(x, y)->g = pixel->g;
+		img.getPixel(x, y)->b = pixel->b;
 	}
     
 }
@@ -104,17 +93,10 @@ unsigned int Block::Dimension() const {
 /**
  * Returns the average color of the pixels in the block's data.
 **/
+//TODO
 RGBAPixel Block::GetAverageColor() const {
 	// replace the statement below with your implementation
-	return RGBAPixel();
-}
-
-/**
- * Replaces all pixel data in the block with the block's average color.
-**/
-void Block::FillAverage() {
-	// complete your implementation below
-	float avgRed = 0;
+		float avgRed = 0;
 		float avgGreen = 0;
 		float avgBlue = 0;
 		for (int i = 0; i < (Dimension()); i++) {
@@ -124,14 +106,26 @@ void Block::FillAverage() {
 				avgBlue += img.getPixel()->b;
 			}
 		}
-		avgRed = avgRed/Dimension();
-		avgGreen = avgGreen/Dimension();
-		avgBlue = avgBlue/Dimension();
+		avgRed = avgRed/((float)Dimension()*1.0);		
+		avgGreen = avgGreen/((float)Dimension()*1.0);
+		avgBlue = avgBlue/((float)Dimension()*1.0);
 		RGBAPixel pixel(avgRed, avgGreen, avgBlue);
-		
+	return pixel;
+}
+
+/**
+ * Replaces all pixel data in the block with the block's average color.
+**/
+//TODO
+void Block::FillAverage() {
+	// complete your implementation below
+	
+		RGBAPixel pixel = GetAverageColor();
 	for (int i = 0; i < (Dimension()); i++) {
 			for (int j = 0; j < (Dimension()); j++) {
-				img.getPixel(i, j) = pixel;
+				img.getPixel(i, j)->r = pixel->r;
+				img.getPixel(i, j)->g = pixel->g;
+				img.getPixel(i, j)->b = pixel->b;
 			}
 	
 	}		

@@ -91,7 +91,21 @@ void Chain::InsertBack(const Block& ndata) {
 //ALI
 void Chain::Reverse() {
 	// complete your implementation below
-    
+	Node* head = NW->next;
+	Node* tail = SE->prev;
+	do {
+		Node* temp = head;
+		head->next = tail->next;
+		head->prev = tail->prev;
+		tail->next = temp->next;
+		tail->prev = temp->prev;
+		head = head->next;
+		tail = tail->prev;
+	}while (head != tail && head->next != tail && tail->prev != head);
+
+    Node* temp = head;
+	head = tail;
+	tail = temp;
 }
 
 /**
@@ -115,7 +129,7 @@ void Chain::Reverse() {
 //ALI
 void Chain::FlipHorizontal(unsigned int cols) {
 	// complete your implementation below
-    
+
 }
 
 /**
@@ -174,7 +188,22 @@ void Chain::Clear() {
 //ALI
 void Chain::Copy(const Chain& other) {
 	// complete your implementation below
-    
+    length_ = other.length_;
+	Node* temp = NW;
+	while (temp->next){
+		Node* temp2 = temp->next
+		delete temp;
+		temp = temp2;
+	}
+	NW.data = other.NW.data;
+	NW.next = other.NW.next;
+	NW.prev = other.NW.prev;
+	temp = other.NW.next;
+	while (temp->next) {
+		InsertBack(temp->data);
+		temp = temp->next;
+	}
+	
 }
 
 /**
