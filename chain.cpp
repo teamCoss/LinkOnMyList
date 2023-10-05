@@ -20,7 +20,7 @@
 **/
 Chain::Chain(PNG& img, unsigned int nodedimension) {
 
-	length_ = (img.width()  * img.length())/nodedimension;
+	length_ = (img.width()  * img.length())/(nodedimension * nodedimension);
 
 	if(length_ != 0 ) {
 		NW =  new Node();
@@ -38,13 +38,13 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 
 	Node* temp = NW;
 	for(int i = 0; i < img.width(); i+= nodedimension) {
-		for(int j = 0; img.length(); i += nodedimention) {
-			temp->data = new block(img, i, j, nodedimension);	
+		for(int j = 0; j < img.length(); j += nodedimention) {
+			temp->data = new Block(img, i, j, nodedimension);	
 			temp = temp->next;
 
 		}
 	}
-	temp = NULL;
+	temp = NULL; // not necessary 
 
 
 
@@ -68,7 +68,33 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 //KIA
 PNG Chain::Render(unsigned int cols, bool full) {
 	// replace the line below with your implementation
-	return PNG();
+
+	int s = Dimension();
+
+	PNG* imgFrame = PNG(length_ * s); 
+	//Node *temp = NW;
+	int row_limit = 0;
+
+	if(length_ % cols != 0) {
+		row_limit = length_ + 1;
+	}
+
+	for(int row = 0; row < row_limit; row++) {
+		for(int x = 0; x < cols; x++) {
+
+			if(temp) {
+			Render(imgFrame, s*x,row*s,full);
+			//img_frame._copy(temp->data);
+			//temp = temp->next;
+			} else {
+				Render(imgFrame,s*x,row*s, full);
+			}
+	
+		}
+	}
+
+
+	return imgFrame; 
 }
 
 /**
@@ -76,7 +102,12 @@ PNG Chain::Render(unsigned int cols, bool full) {
 **/
 //KIA
 void Chain::InsertBack(const Block& ndata) {
-	// complete your implementation below
+
+	Node* newNode = new Node(ndata);
+	SE->next = newNode;
+	SE->next->prev = SE;
+	length_ += 1;
+
     
 }
 
@@ -107,7 +138,7 @@ void Chain::Reverse() {
 	head = tail;
 	tail = temp;
 }
-
+s
 /**
  * Rearranges the Node structure and internal pixel data to be flipped over a vertical axis.
  * This must be done using pointer assignments.
@@ -162,8 +193,14 @@ void Chain::FlipVertical(unsigned int cols) {
 **/
 //KIA
 void Chain::Blockify() {
-	// complete your implementation below
-    
+
+	while(NW != NULL) {
+		NW->data.FillAverage();
+		NW = NW->next;
+	}
+
+
+
 }
 
 /**
@@ -173,7 +210,16 @@ void Chain::Blockify() {
 **/
 //KIA
 void Chain::Clear() {
-	// complete your implementation below
+
+	Node *temp = NW;
+
+	while(NW != NULL) {
+		temp = temp->next;
+		delete NW;
+		NW = temp;
+	}
+	NW = NULL;
+	SE = NULL;
     
 }
 
