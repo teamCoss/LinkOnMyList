@@ -19,13 +19,13 @@
  * @pre input image's width and height are evenly divisible by nodedimension
 **/
 Chain::Chain(PNG& img, unsigned int nodedimension) {
-
-	length_ = (img.width()  * img.length())/(nodedimension * nodedimension);
+	
+	length_ = (img.width()  * img.height())/(nodedimension * nodedimension);
 
 	if(length_ != 0 ) {
 		NW =  new Node();
-		SW = NW;
-	for(int i = 0; i < length_; i++) {
+		SE = NW;
+	for(unsigned int i = 0; i < length_; i++) {
 		Node *temp = new Node();
 		temp->next = NW;
 		temp->next->prev = temp;
@@ -37,14 +37,15 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 
 
 	Node* temp = NW;
-	for(int i = 0; i < img.width(); i+= nodedimension) {
-		for(int j = 0; j < img.length(); j += nodedimention) {
-			temp->data = new Block(img, i, j, nodedimension);	
+	for(unsigned int i = 0; i < img.width(); i+= nodedimension) {
+		for(unsigned int j = 0; img.height(); i += nodedimension) {
+			Block b;
+			temp->data.Build(img, i, j, nodedimension);	
 			temp = temp->next;
 
 		}
 	}
-	temp = NULL; // not necessary 
+	temp = NULL; // not necessary
 
 
 
@@ -97,6 +98,7 @@ PNG Chain::Render(unsigned int cols, bool full) {
 	return imgFrame; 
 }
 
+
 /**
  * Inserts a new Node containing ndata at the back of the Chain
 **/
@@ -138,7 +140,7 @@ void Chain::Reverse() {
 	head = tail;
 	tail = temp;
 }
-s
+
 /**
  * Rearranges the Node structure and internal pixel data to be flipped over a vertical axis.
  * This must be done using pointer assignments.
@@ -160,7 +162,26 @@ s
 //ALI
 void Chain::FlipHorizontal(unsigned int cols) {
 	// complete your implementation below
+	Node* temp = NW;
+	Node* temp2 = temp;
+	Node* placeHolder = temp;
+	while (placeHolder != SE) {
+		for (int i = 0; i < cols; i++) {
+			temp2 = temp2->next;
+		}
+		placeHolder = temp2;
+		do {
+			Node* temp3 = temp;
+			temp->next = temp2->next;
+			temp->prev = temp2->prev;
+			temp2->next = temp3->next;
+			temp2->prev = temp3->prev;
 
+			temp = temp->next;
+			temp2 = temp2->prev;
+		}while (temp2 != temp && temp->next != temp2 && temp2->prev != temp);
+
+	}
 }
 
 /**
@@ -184,7 +205,31 @@ void Chain::FlipHorizontal(unsigned int cols) {
 //ALI
 void Chain::FlipVertical(unsigned int cols) {
 	// complete your implementation below
-    
+	Node* temp = NW;
+	Node* temp2 = SE;
+	bool cont = true;
+	while (cont) {
+		Node* temp3 = temp;
+			temp->next = temp2->next;
+			temp->prev = temp2->prev;
+			temp2->next = temp3->next;
+			temp2->prev = temp3->prev;
+
+			temp = temp->next;
+			temp2 = temp2->prev;
+		for (int i = 1; i < cols; i++) {
+			temp2 = temp2->prev;
+		}
+		Node* temp4 = temp2;
+		for (int i = 0; i < cols; i++) {
+			temp4 = temp4->prev;
+			temp = temp->next;
+		}
+		if (temp4 == temp || temp2 == temp) {
+			break;
+		}
+
+	}
 }
 
 /**
@@ -231,25 +276,24 @@ void Chain::Clear() {
  * @param other The Chain to be copied.
 **/
 //
-//ALI
 void Chain::Copy(const Chain& other) {
 	// complete your implementation below
     length_ = other.length_;
 	Node* temp = NW;
 	while (temp->next){
-		Node* temp2 = temp->next
+		Node* temp2 = temp->next;
 		delete temp;
 		temp = temp2;
 	}
-	NW.data = other.NW.data;
-	NW.next = other.NW.next;
-	NW.prev = other.NW.prev;
-	temp = other.NW.next;
+	NW->data = other.NW->data;
+	NW->next = other.NW->next;
+	NW->prev = other.NW->prev;
+	temp = other.NW->next;
 	while (temp->next) {
 		InsertBack(temp->data);
 		temp = temp->next;
 	}
-	
+
 }
 
 /**

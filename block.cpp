@@ -5,7 +5,7 @@
  *
  *              THIS FILE WILL BE SUBMITTED.
 **/
-
+//branchout
 #include "block.h"
 
 /**
@@ -15,10 +15,13 @@
 **/
 void Block::Build(PNG& img, unsigned int x, unsigned int y, unsigned int dimension) {
 	// complete your implementation below
-    data = new vector(dimension, vector<RGBAPixel>(dimension));
-	for (int i  = x; i < (x+dimension); i++) {
-		for (int j  = y; j < (y+dimension); j++) {
-			data[j-y, i-x] = img.getPixel(i, j);
+	vector<vector<RGBAPixel>> vec( dimension , vector<RGBAPixel> (dimension));  
+   data = vec;
+	for (unsigned int i  = x; i < (x+dimension); i++) {
+		for (unsigned int j  = y; j < (y+dimension); j++) {
+			data[j-y][i-x].r = img.getPixel(i, j)->r;
+			data[j-y][i-x].g = img.getPixel(i, j)->g;
+			data[j-y][i-x].b = img.getPixel(i, j)->b;
 		}
 	}
 }
@@ -35,9 +38,11 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 	// ignore this comment
 	if (full) {
 
-		for (int i = x; i < (x+Dimension()); i++) { 
-			for (int j = y; j < (y+Dimension()); j++) {
-				img.getPixel(i, j) = data[j-y, i-x];
+		for (unsigned int i = x; i < (x+Dimension()); i++) { 
+			for (unsigned int j = y; j < (y+Dimension()); j++) {
+				img.getPixel(i, j)->r = data[j-y][i-x].r;
+				img.getPixel(i, j)->g = data[j-y][i-x].g;
+				img.getPixel(i, j)->b = data[j-y][i-x].b ;
 			}
 		}	
 		
@@ -45,9 +50,9 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 
 		RGBAPixel pixel = GetAverageColor();
 
-		img.getPixel(x, y)->r = pixel->r;
-		img.getPixel(x, y)->g = pixel->g;
-		img.getPixel(x, y)->b = pixel->b;
+		img.getPixel(x, y)->r = pixel.r;
+		img.getPixel(x, y)->g = pixel.g;
+		img.getPixel(x, y)->b = pixel.b;
 	}
     
 }
@@ -58,11 +63,11 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 **/
 void Block::FlipHorizontal() {
 	// complete your implementation below
-    for (int i = 0; i < (Dimension()); i++) {
-			for (int j = 0; j < (Dimension()); j++) {
-				RGBAPixel temp = data[j, i];
-				data[j,i] = data[j, Dimension()-i];
-				data[j, Dimension()-i] = temp;
+    for (unsigned int i = 0; i < (Dimension()); i++) {
+			for (unsigned int j = 0; j < (Dimension()); j++) {
+				RGBAPixel temp = data[j][i];
+				data[j][i] = data[j][Dimension()-i];
+				data[j][Dimension()-i] = temp;
 			}
 		}
 }
@@ -73,11 +78,11 @@ void Block::FlipHorizontal() {
 **/
 void Block::FlipVertical() {
 	// complete your implementation below
-        for (int i = 0; i < (Dimension()); i++) {
-			for (int j = 0; j < (Dimension()); j++) {
-				RGBAPixel temp = data[j, i];
-				data[j,i] = data[Dimension()-j, i];
-				data[Dimension()-j, i] = temp;
+        for (unsigned int i = 0; i < (Dimension()); i++) {
+			for (unsigned int j = 0; j < (Dimension()); j++) {
+				RGBAPixel temp = data[j][i];
+				data[j][i] = data[Dimension()-j][ i];
+				data[Dimension()-j][ i] = temp;
 			}
 		}
 }
@@ -99,11 +104,11 @@ RGBAPixel Block::GetAverageColor() const {
 		float avgRed = 0;
 		float avgGreen = 0;
 		float avgBlue = 0;
-		for (int i = 0; i < (Dimension()); i++) {
-			for (int j = 0; j < (Dimension()); j++) {
-				avgRed += img.getPixel()->r;
-				avgGreen += img.getPixel()->g;
-				avgBlue += img.getPixel()->b;
+		for (unsigned int i = 0; i < (Dimension()); i++) {
+			for (unsigned int j = 0; j < (Dimension()); j++) {
+				avgRed += data[i][j].r;
+				avgGreen += data[i][j].g;
+				avgBlue += data[i][j].b;
 			}
 		}
 		avgRed = avgRed/((float)Dimension()*1.0);		
@@ -121,11 +126,11 @@ void Block::FillAverage() {
 	// complete your implementation below
 	
 		RGBAPixel pixel = GetAverageColor();
-	for (int i = 0; i < (Dimension()); i++) {
-			for (int j = 0; j < (Dimension()); j++) {
-				img.getPixel(i, j)->r = pixel->r;
-				img.getPixel(i, j)->g = pixel->g;
-				img.getPixel(i, j)->b = pixel->b;
+	for (unsigned int i = 0; i < (Dimension()); i++) {
+			for (unsigned int j = 0; j < (Dimension()); j++) {
+				data[i][j].r = pixel.r;
+				data[i][j].g = pixel.g;
+				data[i][j].b = pixel.b;
 			}
 	
 	}		
