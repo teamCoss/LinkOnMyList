@@ -66,102 +66,133 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 **/
 //KIA
 PNG Chain::Render(unsigned int cols, bool full) {
-Node *temp = NW;
-	int s = (temp->data).Dimension();
-
+	
 	Node *temp = NW;
-
-	PNG* imgFrame = PNG(length_ * s); 
+	unsigned int s = (temp->data).Dimension();
 	int row_limit = 0;
-
-	if(length_ % cols != 0) {
-		row_limit = length_ + 1;
-	}
-
+	row_limit = (length_ + cols - 1) / cols;
+		
+	
+PNG* imgFrame;
+// row_limit = length_/cols + 1;
+if (full){
+	imgFrame = new PNG(s*cols,s*row_limit); 
+} else {
+	imgFrame = new PNG(cols,row_limit); 
+}
+	
 	for(int row = 0; row < row_limit; row++) {
 		for(int x = 0; x < cols; x++) {
-
-			if(temp) {
-			temp->data.Render(imgFrame, s*x,row*s,full);
+		if(temp) {
+			if(full) {
+			temp->data.Render(*imgFrame, s*x,row*s,full);
 			temp = temp->next;
-			} 
+			} else {
+			temp->data.Render(*imgFrame, x,row,full);
+			temp = temp->next;
+			
+
+			}
+		}
+			
 	
 		}
 	}
 
 
+// 	PNG Chain::Render(unsigned int cols, bool full) {
+//     Node* temp = NW;
+//     unsigned int s = (temp->data).Dimension();
+//     int row_limit = (length_ + cols - 1) / cols;  // Calculate the number of rows needed
+
+//     PNG* imgFrame = new PNG(s * cols, s * row_limit);
+
+//     for (int row = 0; row < row_limit; row++) {
+//         for (int x = 0; x < cols; x++) {
+//             if (temp != nullptr) {
+//                 if (full) {
+//                     temp->data.Render(*imgFrame, s * x, row * s, full);
+//                 } else {
+//                     temp->data.Render(*imgFrame, x * s, row * s, full);
+//                 }
+//                 temp = temp->next;
+//             } else {
+//                 // If there are not enough nodes to fill the row, fill the remaining with white pixels
+//                 for (int i = x; i < cols; i++) {
+//                     for (int j = 0; j < s; j++) {
+//                         for (int k = 0; k < s; k++) {
+//                             imgFrame->GetPixel(x * s + j, row * s + k) = RGBAPixel(255, 255, 255);
+//                         }
+//                     }
+//                 }
+//                 break;  // Break the loop as there are no more nodes to process
+//             }
+//         }
+//     }
+
+//     return *imgFrame;
+// }
 
 
-	return imgFrame;
-	/*
 
 
 
-	/*
-	PNG ret();
-	Node *temp = NW;
-	if (full) {
-
-	} else {
-
-	}
+	return *imgFrame;
 	
+
 	
-	*/
-	
 
-	// return imgFrame; 
-	//return ret;
-	//return PNG();
-	//BRYAN
-	cout << "!!!!!!!!!!!!!!!" << length_;
 
-    int dimension = NW->data.Dimension();
-    int rows;
 
-    if (this->Length() % cols == 0) {
-        rows = this->Length() / cols;
-    } else {
-        rows = this->Length() / cols + 1;
-    }
+	// cout << "!!!!!!!!!!!!!!!" << length_;
 
-    int count = 0;
+    // int dimension = NW->data.Dimension();
+    // int rows;
+
+    // if (this->Length() % cols == 0) {
+    //     rows = this->Length() / cols;
+    // } else {
+    //     rows = this->Length() / cols + 1;
+    // }
+
+    // int count = 0;
     
-    if(full) {
-        PNG * out = new PNG(cols * dimension, rows * dimension);
-        Node * ptr = NW;
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
-                if (count >= length_) 
-                {
-                    break;
-                }
+    // if(full) {
+    //     PNG * out = new PNG(cols * dimension, rows * dimension);
+    //     Node * ptr = NW;
+    //     for(int i = 0; i < rows; i++) {
+    //         for(int j = 0; j < cols; j++) {
+    //             if (count >= length_) 
+    //             {
+    //                 break;
+    //             }
                 
-                ptr->data.Render(*out,j * dimension,i * dimension,full);
-                ptr = ptr->next;
-                count++;
-            }
-        }
-        return *out;
+    //             ptr->data.Render(*out,j * dimension,i * dimension,full);
+    //             ptr = ptr->next;
+    //             count++;
+    //         }
+    //     }
+    //     return *out;
         
-    }
-    else {
-        PNG * out = new PNG(cols, rows);
-        Node * ptr = NW->next;
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
-                if (count >= length_) 
-                {
-                    break;
-                }
-                ptr->data.Render(*out,j,i,full);
-                ptr = ptr->next;
-                count++;
-            }
-        }
-        return *out;
-    }
-}
+    // }
+    // else {
+    //     PNG * out = new PNG(cols, rows);
+    //     Node * ptr = NW->next;
+    //     for(int i = 0; i < rows; i++) {
+    //         for(int j = 0; j < cols; j++) {
+    //             if (count >= length_) 
+    //             {
+    //                 break;
+    //             }
+    //             ptr->data.Render(*out,j,i,full);
+    //             ptr = ptr->next;
+    //             count++;
+    //         }
+    //     }
+    //     return *out;
+    // }
+ }
+
 
 
 /**
@@ -187,23 +218,23 @@ void Chain::InsertBack(const Block& ndata) {
  *  after:	NW -> H <-> G <-> F <-> E <-> D <-> C <-> B <-> A <- SE
 **/
 //ALI
-void Chain::Reverse() {
-	// complete your implementation below
-	//BRYAN
-	Node * curr = NW;
-    while (curr != SE)
-    {
-        Node * prev = curr->prev;
-        curr->prev = curr->next;
-        curr->next = prev;
-        curr = curr->prev;
-    }
+// void Chain::Reverse() {
+// 	// complete your implementation below
+// 	//BRYAN
+// 	Node * curr = NW;
+//     while (curr != SE)
+//     {
+//         Node * prev = curr->prev;
+//         curr->prev = curr->next;
+//         curr->next = prev;
+//         curr = curr->prev;
+//     }
     
-    Node * old = SE;
-    SE = NW;
-    NW = old;
-    NW->next = NW->prev;
-    SE->prev = SE->next;
+//     Node * old = SE;
+//     SE = NW;
+//     NW = old;
+//     NW->next = NW->prev;
+//     SE->prev = SE->next;
 	// Node* head = NW;
 	// Node* head2 = NW;
 	// Node* ptr2 = head->next;
@@ -223,7 +254,34 @@ void Chain::Reverse() {
     // Node* temp = NW;
 	// NW = SE;
 	// SE = temp;
+//}
+
+void Chain::Reverse() {
+    if (NW == nullptr || SE == nullptr || NW == SE) {
+        // Empty list or a single-node list, nothing to reverse
+        return;
+    }
+
+    Node *curr = NW;
+    Node *prev = nullptr;
+    Node *next = nullptr;
+
+    while (curr != nullptr) {
+        next = curr->next;
+        curr->next = prev;
+        curr->prev = next;
+        prev = curr;
+        curr = next;
+    }
+
+    // Update head and tail pointers
+    Node *oldTail = SE;
+    SE = NW;
+    NW = oldTail;
+    NW->next = nullptr;   // Set the next of the new head to null
+    SE->prev = nullptr;   // Set the prev of the new tail to null
 }
+
 
 /**
  * Rearranges the Node structure and internal pixel data to be flipped over a vertical axis.
@@ -280,16 +338,51 @@ void Chain::FlipHorizontal(unsigned int cols) {
 **/
 //ALI
 void Chain::FlipVertical(unsigned int cols) {
-	// complete your implementation below
-	std::cout << "we runnin\n";
-	Node* temp = NW;
-	Node* temp2 = SE;
-	bool run = true;
-	while (run) {
-		for (int i = 1; i < cols; i++) {
+Node* temp = NW;
+Node* temp2 = SE;
+bool cont = true;
 
-		}
-	}
+while (cont) {
+    Node* tempNext = temp->next;
+    Node* tempPrev = temp->prev;
+    Node* temp2Next = temp2->next;
+    Node* temp2Prev = temp2->prev;
+
+    // Swap pointers for temp and temp2
+    temp->next = temp2Next;
+    temp->prev = temp2Prev;
+    temp2->next = tempNext;
+    temp2->prev = tempPrev;
+
+    // Move pointers forward
+    temp = tempNext;
+    temp2 = temp2Prev;
+
+    // Move temp2 to the next block
+    for (unsigned int i = 1; i < cols; i++) {
+        if (temp2 != nullptr) {
+            temp2 = temp2->prev;
+        } else {
+            break;  // Break if reaching the end of the list
+        }
+    }
+
+    // Move temp to the next block
+    Node* temp4 = temp2;
+    for (unsigned int i = 0; i < cols; i++) {
+        if (temp != nullptr) {
+            temp = temp->next;
+        } else {
+            break;  // Break if reaching the end of the list
+        }
+    }
+
+    // Check termination conditions
+    if (temp4 == nullptr || temp2 == nullptr || temp4 == temp || temp2 == temp) {
+        cont = false;
+    }
+}
+
 }
 
 /**

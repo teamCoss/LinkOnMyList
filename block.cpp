@@ -38,7 +38,6 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 	// ignore this comment
 	int capacity = Dimension();
 	if (full) {
-		std::cout << "\n here\n";
 		for (unsigned int i = x; i < (x+capacity); i++) { 
 			for (unsigned int j = y; j < (y+capacity); j++) {
 				img.getPixel(i, j)->r = data[j-y][i-x].r;
@@ -55,7 +54,6 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 		img.getPixel(x, y)->g = pixel.g;
 		img.getPixel(x, y)->b = pixel.b;
 	}
-    std::cout << "there\n";
 }
 
 /**
@@ -93,8 +91,6 @@ void Block::FlipVertical() {
  */
 unsigned int Block::Dimension() const {
 	// replace the statement below with your implementation
-	std::cout << " this: ";
-	std::cout << data.size() << std::endl;
 	return data.size();
 }
 
