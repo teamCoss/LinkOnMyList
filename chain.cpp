@@ -66,51 +66,40 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 **/
 //KIA
 PNG Chain::Render(unsigned int cols, bool full) {
-	// replace the line below with your implementation
-	// Node *temp = NW;
-	// int s = (temp->data).Dimension();
-
-	// PNG* imgFrame = PNG(length_ * s); 
-	// int row_limit = 0;
-
-	// if(length_ % cols != 0) {
-	// 	row_limit = length_ + 1;
-	// }
-
-	// for(int row = 0; row < row_limit; row++) {
-	// 	for(int x = 0; x < cols; x++) {
-
-	// 		if(temp) {
-	// 		Render(imgFrame, s*x,row*s,full);
-	// 		//img_frame._copy(temp->data);
-	// 		//temp = temp->next;
-	// 		} else {
-	// 			Render(imgFrame,s*x,row*s, full);
-	// 		}
-	
-	// 	}
-	// }
-
-
-
-
-
-	/*
-	PNG ret();
+	//replace the line below with your implementation
 	Node *temp = NW;
-	if (full) {
+	unsigned int s = (temp->data).Dimension();
 
-	} else {
+	PNG* imgFrame = PNG(length_ * s); 
+	unsigned int row_limit = 0;
 
+	if(length_ % cols != 0) {
+		row_limit = length_ + 1;
 	}
-	
-	
-	*/
+
+	for(unsigned int row = 0; row < row_limit; row++) {
+		for(unsigned int x = 0; x < cols; x++) {	
+			Render(imgFrame, s*x,row*s,full);
+
+		}
+	}
+
+
+
+	// PNG ret();
+	// Node *temp = NW;
+	// if (full) {
+
+	// } else {
+
+	// }
 	
 
-	// return imgFrame; 
-	//return ret;
-	return PNG();
+	
+
+	return imgFrame; 
+
+//	return PNG();
 }
 
 
