@@ -7,7 +7,7 @@
 **/
 
 #include <math.h>
-
+#include <iostream>
 #include "chain.h"
 
 /**
@@ -67,43 +67,98 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 //KIA
 PNG Chain::Render(unsigned int cols, bool full) {
 	// replace the line below with your implementation
-	Node *temp = NW;
-	unsigned int s = (temp->data).Dimension();
-
-	PNG imgFrame = PNG(length_,s); 
-	unsigned int row_limit = 0;
-
-	if(length_ % cols != 0) {
-		row_limit = length_ + 1;
-	}
-
-	for(unsigned int row = 0; row < 6; row++) {
-		for(unsigned int x = 0; x < cols; x++) {	
-			if(temp) {
-			(temp->data).Render(imgFrame, row*x,x*s,full);
-				 temp = temp->next;
-			}
-		
-
-		}
-	}
-
-
-
-	// PNG ret();
 	// Node *temp = NW;
-	// if (full) {
+	// int s = (temp->data).Dimension();
 
-	// } else {
+	// PNG* imgFrame = PNG(length_ * s); 
+	// int row_limit = 0;
 
+	// if(length_ % cols != 0) {
+	// 	row_limit = length_ + 1;
 	// }
+
+	// for(int row = 0; row < row_limit; row++) {
+	// 	for(int x = 0; x < cols; x++) {
+
+	// 		if(temp) {
+	// 		Render(imgFrame, s*x,row*s,full);
+	// 		//img_frame._copy(temp->data);
+	// 		//temp = temp->next;
+	// 		} else {
+	// 			Render(imgFrame,s*x,row*s, full);
+	// 		}
+	
+	// 	}
+	// }
+
+
+
+
+
+	/*
+	PNG ret();
+	Node *temp = NW;
+	if (full) {
+
+	} else {
+
+	}
+	
+	
+	*/
 	
 
-	
+	// return imgFrame; 
+	//return ret;
+	//return PNG();
+	//BRYAN
+	cout << "!!!!!!!!!!!!!!!" << length_;
 
-	return imgFrame; 
+    int dimension = NW->data.Dimension();
+    int rows;
 
-//	return PNG();
+    if (this->Length() % cols == 0) {
+        rows = this->Length() / cols;
+    } else {
+        rows = this->Length() / cols + 1;
+    }
+
+    int count = 0;
+    
+    if(full) {
+        PNG * out = new PNG(cols * dimension, rows * dimension);
+        Node * ptr = NW;
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if (count >= length_) 
+                {
+                    break;
+                }
+                
+                ptr->data.Render(*out,j * dimension,i * dimension,full);
+                ptr = ptr->next;
+                count++;
+            }
+        }
+        return *out;
+        
+    }
+    else {
+        PNG * out = new PNG(cols, rows);
+        Node * ptr = NW->next;
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if (count >= length_) 
+                {
+                    break;
+                }
+                ptr->data.Render(*out,j,i,full);
+                ptr = ptr->next;
+                count++;
+            }
+        }
+        return *out;
+    }
 }
 
 
@@ -132,18 +187,37 @@ void Chain::InsertBack(const Block& ndata) {
 //ALI
 void Chain::Reverse() {
 	// complete your implementation below
-	Node* head = NW;
-	Node* head2 = NW;
-	Node* ptr2 = head->next;
-	head ->next = NULL;
-	head ->prev = ptr2;
-	while (ptr2) {
-		ptr2->prev = ptr2->next;
-		ptr2->next = head;
-		ptr2 = ptr2->prev;
-	}
-	NW = head;
-	SE = head2;
+	//BRYAN
+	Node * curr = NW;
+    while (curr != SE)
+    {
+        Node * prev = curr->prev;
+        curr->prev = curr->next;
+        curr->next = prev;
+        curr = curr->prev;
+    }
+    
+    Node * old = SE;
+    SE = NW;
+    NW = old;
+    NW->next = NW->prev;
+    SE->prev = SE->next;
+	// Node* head = NW;
+	// Node* head2 = NW;
+	// Node* ptr2 = head->next;
+	// head ->next = NULL;
+	// head ->prev = ptr2;
+	// while (ptr2) {
+	// 	ptr2->prev = ptr2->next;
+	// 	ptr2->next = head;
+	// 	ptr2 = ptr2->prev;
+	// }
+	// NW = head;
+	// while (head->next) {
+	// 	head = head->next;
+	// }
+	// SE = head;
+	// //SE = head2;
     // Node* temp = NW;
 	// NW = SE;
 	// SE = temp;
@@ -205,30 +279,14 @@ void Chain::FlipHorizontal(unsigned int cols) {
 //ALI
 void Chain::FlipVertical(unsigned int cols) {
 	// complete your implementation below
+	std::cout << "we runnin\n";
 	Node* temp = NW;
 	Node* temp2 = SE;
-	bool cont = true;
-	while (cont) {
-		Node* temp3 = temp;
-			temp->next = temp2->next;
-			temp->prev = temp2->prev;
-			temp2->next = temp3->next;
-			temp2->prev = temp3->prev;
+	bool run = true;
+	while (run) {
+		for (int i = 1; i < cols; i++) {
 
-			temp = temp->next;
-			temp2 = temp2->prev;
-		for (unsigned int i = 1; i < cols; i++) {
-			temp2 = temp2->prev;
 		}
-		Node* temp4 = temp2;
-		for (unsigned int i = 0; i < cols; i++) {
-			temp4 = temp4->prev;
-			temp = temp->next;
-		}
-		if (temp4 == temp || temp2 == temp) {
-			cont = false;
-		}
-
 	}
 }
 
