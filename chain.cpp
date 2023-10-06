@@ -139,21 +139,21 @@ void Chain::InsertBack(const Block& ndata) {
 //ALI
 void Chain::Reverse() {
 	// complete your implementation below
-	Node* head = NW->next;
-	Node* tail = SE->prev;
-	do {
-		Node* temp = head;
-		head->next = tail->next;
-		head->prev = tail->prev;
-		tail->next = temp->next;
-		tail->prev = temp->prev;
-		head = head->next;
-		tail = tail->prev;
-	}while (head != tail && head->next != tail && tail->prev != head);
-
-    Node* temp = head;
-	head = tail;
-	tail = temp;
+	Node* head = NW;
+	Node* head2 = NW;
+	Node* ptr2 = head->next;
+	head ->next = NULL;
+	head ->prev = ptr2;
+	while (ptr2) {
+		ptr2->prev = ptr2->next;
+		ptr2->next = head;
+		ptr2 = ptr2->prev;
+	}
+	NW = head;
+	SE = head2;
+    // Node* temp = NW;
+	// NW = SE;
+	// SE = temp;
 }
 
 /**
@@ -178,25 +178,17 @@ void Chain::Reverse() {
 void Chain::FlipHorizontal(unsigned int cols) {
 	// complete your implementation below
 	Node* temp = NW;
-	Node* temp2 = temp;
-	Node* placeHolder = temp;
-	while (placeHolder != SE) {
-		for (unsigned int i = 0; i < cols; i++) {
-			temp2 = temp2->next;
+	for (int j = 0; j < (length_ / cols); j++) {
+		for (int i = 0; i < cols; i++) {
+		temp->data.FlipHorizontal();
+		temp = temp->next;
 		}
-		placeHolder = temp2;
-		do {
-			Node* temp3 = temp;
-			temp->next = temp2->next;
-			temp->prev = temp2->prev;
-			temp2->next = temp3->next;
-			temp2->prev = temp3->prev;
-
-			temp = temp->next;
-			temp2 = temp2->prev;
-		}while (temp2 != temp && temp->next != temp2 && temp2->prev != temp);
-
+		Node* end = temp->prev;
+		end->next = NULL;
+		Reverse();
+		end->next = temp;
 	}
+
 }
 
 /**
