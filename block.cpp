@@ -64,10 +64,10 @@ void Block::Render(PNG& img, unsigned int x, unsigned int y, bool full) const {
 void Block::FlipHorizontal() {
 	// complete your implementation below
     for (unsigned int i = 0; i < (Dimension()); i++) {
-			for (unsigned int j = 0; j < (Dimension()); j++) {
-				RGBAPixel temp = data[j][i];
-				data[j][i] = data[j][Dimension()-i];
-				data[j][Dimension()-i] = temp;
+			for (unsigned int j = 0; j < (Dimension()/2); j++) {
+				RGBAPixel temp = data[i][j];
+				data[i][j] = data[i][Dimension()-j-1];
+				data[i][Dimension()-j-1] = temp;
 			}
 		}
 }
@@ -78,11 +78,11 @@ void Block::FlipHorizontal() {
 **/
 void Block::FlipVertical() {
 	// complete your implementation below
-        for (unsigned int i = 0; i < (Dimension()); i++) {
+        for (unsigned int i = 0; i < (Dimension()/2); i++) {
 			for (unsigned int j = 0; j < (Dimension()); j++) {
-				RGBAPixel temp = data[j][i];
-				data[j][i] = data[Dimension()-j][ i];
-				data[Dimension()-j][ i] = temp;
+				RGBAPixel temp = data[i][j];
+				data[i][j] = data[Dimension()-i-1][j];
+				data[Dimension()-i-1][j] = temp;
 			}
 		}
 }
@@ -101,9 +101,9 @@ unsigned int Block::Dimension() const {
 //TODO
 RGBAPixel Block::GetAverageColor() const {
 	// replace the statement below with your implementation
-		float avgRed = 0;
-		float avgGreen = 0;
-		float avgBlue = 0;
+		int avgRed = 0;
+		int avgGreen = 0;
+		int avgBlue = 0;
 		for (unsigned int i = 0; i < (Dimension()); i++) {
 			for (unsigned int j = 0; j < (Dimension()); j++) {
 				avgRed += data[i][j].r;
@@ -111,9 +111,9 @@ RGBAPixel Block::GetAverageColor() const {
 				avgBlue += data[i][j].b;
 			}
 		}
-		avgRed = avgRed/((float)Dimension()*1.0);		
-		avgGreen = avgGreen/((float)Dimension()*1.0);
-		avgBlue = avgBlue/((float)Dimension()*1.0);
+		avgRed = avgRed/(Dimension()*Dimension());		
+		avgGreen = avgGreen/(Dimension()*Dimension());
+		avgBlue = avgBlue/(Dimension()*Dimension());
 		RGBAPixel pixel(avgRed, avgGreen, avgBlue);
 	return pixel;
 }

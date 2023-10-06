@@ -38,15 +38,13 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 
 	Node* temp = NW;
 	for(unsigned int i = 0; i < img.width(); i+= nodedimension) {
-		for(unsigned int j = 0; img.height(); i += nodedimension) {
+		for(unsigned int j = 0; j < img.height(); j += nodedimension) {
 			Block b;
 			temp->data.Build(img, i, j, nodedimension);	
 			temp = temp->next;
 
 		}
 	}
-	temp = NULL; // not necessary
-
 
 
 
@@ -69,33 +67,50 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 //KIA
 PNG Chain::Render(unsigned int cols, bool full) {
 	// replace the line below with your implementation
+	// Node *temp = NW;
+	// int s = (temp->data).Dimension();
 
-	int s = Dimension();
+	// PNG* imgFrame = PNG(length_ * s); 
+	// int row_limit = 0;
 
-	PNG* imgFrame = PNG(length_ * s); 
-	//Node *temp = NW;
-	int row_limit = 0;
+	// if(length_ % cols != 0) {
+	// 	row_limit = length_ + 1;
+	// }
 
-	if(length_ % cols != 0) {
-		row_limit = length_ + 1;
-	}
+	// for(int row = 0; row < row_limit; row++) {
+	// 	for(int x = 0; x < cols; x++) {
 
-	for(int row = 0; row < row_limit; row++) {
-		for(int x = 0; x < cols; x++) {
-
-			if(temp) {
-			Render(imgFrame, s*x,row*s,full);
-			//img_frame._copy(temp->data);
-			//temp = temp->next;
-			} else {
-				Render(imgFrame,s*x,row*s, full);
-			}
+	// 		if(temp) {
+	// 		Render(imgFrame, s*x,row*s,full);
+	// 		//img_frame._copy(temp->data);
+	// 		//temp = temp->next;
+	// 		} else {
+	// 			Render(imgFrame,s*x,row*s, full);
+	// 		}
 	
-		}
+	// 	}
+	// }
+
+
+
+
+
+	/*
+	PNG ret();
+	Node *temp = NW;
+	if (full) {
+
+	} else {
+
 	}
+	
+	
+	*/
+	
 
-
-	return imgFrame; 
+	// return imgFrame; 
+	//return ret;
+	return PNG();
 }
 
 
@@ -166,7 +181,7 @@ void Chain::FlipHorizontal(unsigned int cols) {
 	Node* temp2 = temp;
 	Node* placeHolder = temp;
 	while (placeHolder != SE) {
-		for (int i = 0; i < cols; i++) {
+		for (unsigned int i = 0; i < cols; i++) {
 			temp2 = temp2->next;
 		}
 		placeHolder = temp2;
@@ -217,16 +232,16 @@ void Chain::FlipVertical(unsigned int cols) {
 
 			temp = temp->next;
 			temp2 = temp2->prev;
-		for (int i = 1; i < cols; i++) {
+		for (unsigned int i = 1; i < cols; i++) {
 			temp2 = temp2->prev;
 		}
 		Node* temp4 = temp2;
-		for (int i = 0; i < cols; i++) {
+		for (unsigned int i = 0; i < cols; i++) {
 			temp4 = temp4->prev;
 			temp = temp->next;
 		}
 		if (temp4 == temp || temp2 == temp) {
-			break;
+			cont = false;
 		}
 
 	}
@@ -238,10 +253,10 @@ void Chain::FlipVertical(unsigned int cols) {
 **/
 //KIA
 void Chain::Blockify() {
-
-	while(NW != NULL) {
-		NW->data.FillAverage();
-		NW = NW->next;
+	Node* temp = NW;
+	while(temp != NULL) {
+		temp->data.FillAverage();
+		temp = temp->next;
 	}
 
 
