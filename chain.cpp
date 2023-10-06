@@ -70,7 +70,7 @@ PNG Chain::Render(unsigned int cols, bool full) {
 	Node *temp = NW;
 	unsigned int s = (temp->data).Dimension();
 
-	PNG* imgFrame = PNG(length_ * s); 
+	PNG imgFrame = PNG(length_,s); 
 	unsigned int row_limit = 0;
 
 	if(length_ % cols != 0) {
@@ -79,7 +79,11 @@ PNG Chain::Render(unsigned int cols, bool full) {
 
 	for(unsigned int row = 0; row < row_limit; row++) {
 		for(unsigned int x = 0; x < cols; x++) {	
-			Render(imgFrame, s*x,row*s,full);
+			if(temp) {
+			(temp->data).Render(imgFrame, row*x,x*s,full);
+				 temp = temp->next;
+			}
+		
 
 		}
 	}
