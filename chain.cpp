@@ -66,32 +66,34 @@ Chain::Chain(PNG& img, unsigned int nodedimension) {
 **/
 //KIA
 PNG Chain::Render(unsigned int cols, bool full) {
-	// replace the line below with your implementation
-	// Node *temp = NW;
-	// int s = (temp->data).Dimension();
+Node *temp = NW;
+	int s = (temp->data).Dimension();
 
-	// PNG* imgFrame = PNG(length_ * s); 
-	// int row_limit = 0;
+	Node *temp = NW;
 
-	// if(length_ % cols != 0) {
-	// 	row_limit = length_ + 1;
-	// }
+	PNG* imgFrame = PNG(length_ * s); 
+	int row_limit = 0;
 
-	// for(int row = 0; row < row_limit; row++) {
-	// 	for(int x = 0; x < cols; x++) {
+	if(length_ % cols != 0) {
+		row_limit = length_ + 1;
+	}
 
-	// 		if(temp) {
-	// 		Render(imgFrame, s*x,row*s,full);
-	// 		//img_frame._copy(temp->data);
-	// 		//temp = temp->next;
-	// 		} else {
-	// 			Render(imgFrame,s*x,row*s, full);
-	// 		}
+	for(int row = 0; row < row_limit; row++) {
+		for(int x = 0; x < cols; x++) {
+
+			if(temp) {
+			temp->data.Render(imgFrame, s*x,row*s,full);
+			temp = temp->next;
+			} 
 	
-	// 	}
-	// }
+		}
+	}
 
 
+
+
+	return imgFrame;
+	/*
 
 
 
